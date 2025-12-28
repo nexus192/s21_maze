@@ -5,6 +5,29 @@ project(s21_maze VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(BUILD_COVERAGE "Build with coverage instrumentation" OFF)
+if(BUILD_COVERAGE)
+    add_compile_options(--coverage)
+    add_link_options(--coverage)
+    
+    find_program(GCOVR gcovr)
+    if(GCOVR)
+        add_custom_target(coverage
+            COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+            COMMAND ${GCOVR} -r ${CMAKE_SOURCE_DIR}
+                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/generator/'
+                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/solver/'
+                --html --html-details --html-theme github.dark-green
+                -o coverage.html
+            COMMAND open coverage.html
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Running tests and generating coverage report..."
+            DEPENDS test_generator test_solver
+        )
+    else()
+        message(WARNING "gcovr not found, coverage target disabled")
+    endif()
+endif()
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
@@ -67,3 +90,10 @@ install(TARGETS apps21_maze
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+option(BUILD_COVERAGE "Build with coverage instrumentation" OFF)
+
+if(BUILD_COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+endif()
