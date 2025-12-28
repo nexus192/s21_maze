@@ -51,6 +51,13 @@ void MazeModel::generate(int rows, int cols)
     emit mazeChanged();
 }
 
+void MazeModel::setMazeData(MazeData&& data) {
+    beginResetModel();
+    maze_ = std::move(data);
+    endResetModel();
+    emit mazeChanged();
+}
+
 void MazeModel::clear()
 {
     beginResetModel();

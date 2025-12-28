@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -48,6 +49,7 @@ target_link_libraries(apps21_maze
 )
 target_link_libraries(apps21_maze PRIVATE Qt6::Core)
 target_link_libraries(apps21_maze PRIVATE Qt6::Widgets)
+target_link_libraries(apps21_maze PRIVATE Qt6::Concurrent)
 
 include(GNUInstallDirs)
 install(TARGETS apps21_maze

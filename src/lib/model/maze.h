@@ -38,6 +38,7 @@ public:
     int cols() const;
     bool isGenerated() const;
 
+    void setMazeData(MazeData&& data);
     Q_INVOKABLE void generate(int rows, int cols);
     Q_INVOKABLE void clear();
 
