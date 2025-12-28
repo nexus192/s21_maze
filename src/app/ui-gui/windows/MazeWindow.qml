@@ -1,41 +1,63 @@
 import QtQuick
+import QtQuick.Controls
 
 Item {
+    id: mazeWindow
+
     Rectangle {
-        anchors.fill: parent
+        id: mazeField
+        width: 500
+        height: 500
+        anchors.centerIn: parent
         color: "white"
+        border.color: "black"
+        border.width: 2
+
+        property real cellWidth: (width - 4) / mazeModel.cols   // account for outer border
+        property real cellHeight: (height - 4) / mazeModel.rows
 
         Repeater {
             model: mazeModel
 
             delegate: Item {
-                width: 20
-                height: 20
-                x: index % mazeModel.cols * width
-                y: Math.floor(index / mazeModel.cols) * height
+                id: cellDelegate
+                
+                property int row: Math.floor(index / mazeModel.cols)
+                property int col: index % mazeModel.cols
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "transparent"
-                    border.color: "black"
-                }
+                x: 2 + col * mazeField.cellWidth
+                y: 2 + row * mazeField.cellHeight
+                width: mazeField.cellWidth
+                height: mazeField.cellHeight
 
+                // right wall
                 Rectangle {
                     visible: rightWall
                     width: 2
-                    height: parent.height
+                    height: parent.height + 2
                     anchors.right: parent.right
+                    anchors.top: parent.top
                     color: "black"
                 }
 
+                // bottom wall
                 Rectangle {
                     visible: bottomWall
                     height: 2
-                    width: parent.width
+                    width: parent.width + 2
                     anchors.bottom: parent.bottom
+                    anchors.left: parent.left
                     color: "black"
                 }
             }
         }
+    }
+
+    Button {
+        text: "Back"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 10
+        onClicked: stackView.pop()
     }
 }
