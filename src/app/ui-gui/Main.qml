@@ -14,6 +14,17 @@ ApplicationWindow {
         y: parent.height / 2 - height / 2
         width: parent.width
         height: parent.height
-        initialItem: StartWindow {}
+        initialItem: StartWindow {
+            onGenerateClicked: function () {
+                mazeModel.generate(20, 20)
+                _stackView.push(_maze)
+            }
+        }
+    }
+
+    MazeWindow {
+        id: _maze
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
     }
 }

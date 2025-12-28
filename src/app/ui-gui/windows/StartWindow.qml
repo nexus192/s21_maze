@@ -2,16 +2,17 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
+    id: _window
+    signal generateClicked
+    signal loadClicked
+
     Column {
         anchors.centerIn: parent
         spacing: 20
 
         Button {
             text: "Generate maze"
-            onClicked: {
-                mazeModel.generate(20, 20)
-                stack.push("MazeView.qml")
-            }
+            onClicked: () => _window.generateClicked()
         }
 
         Button {
