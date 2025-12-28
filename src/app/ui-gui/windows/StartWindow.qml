@@ -10,15 +10,14 @@ Item {
             text: "Generate maze"
             onClicked: {
                 mazeModel.generate(20, 20)
-                stack.push("MazeView.qml")
+                stackView.push("MazeWindow.qml")
             }
         }
 
         Button {
             text: "Load from file"
             onClicked: {
-
-                // позже
+                // later
             }
         }
     }

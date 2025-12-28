@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 
 struct MazeCell
 {
@@ -17,7 +17,7 @@ struct MazeData
     std::vector<std::vector<MazeCell>> cells;
 };
 
-class MazeModel : public QAbstractTableModel
+class MazeModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -31,13 +31,7 @@ public:
     explicit MazeModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex & = QModelIndex()) const override;
-    int columnCount(const QModelIndex & = QModelIndex()) const override;
-
     QVariant data(const QModelIndex &index, int role) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
     QHash<int, QByteArray> roleNames() const override;
 
     int rows() const;
