@@ -1,27 +1,33 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+
 #include "src/lib/model/maze.h"
 #include "src/lib/service/ioParser/asyncIOParser.h"
+#include "src/lib/service/solver/solver.h"
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication app(argc, argv);
+int main(int argc, char* argv[]) {
+  QGuiApplication app(argc, argv);
 
-    MazeModel mazeModel;
-    AsyncIOParser parser;
+  MazeModel mazeModel;
+  AsyncIOParser parser;
+  Solver solver;
 
-    QQmlApplicationEngine engine;
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    
-    engine.rootContext()->setContextProperty("mazeModel", &mazeModel);
-    engine.rootContext()->setContextProperty("mazeParser", &parser);
-    engine.loadFromModule("s21_maze", "Main");
+  // connect solver to maze data
+  QObject::connect(&mazeModel, &MazeModel::mazeChanged, [&]() {
+    solver.setMazeData(&mazeModel.mazeData());
+    solver.clearPath();
+  });
 
-    return app.exec();
+  QQmlApplicationEngine engine;
+  QObject::connect(
+      &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+      []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
+
+  engine.rootContext()->setContextProperty("mazeModel", &mazeModel);
+  engine.rootContext()->setContextProperty("mazeParser", &parser);
+  engine.rootContext()->setContextProperty("mazeSolver", &solver);
+  engine.loadFromModule("s21_maze", "Main");
+
+  return app.exec();
 }
