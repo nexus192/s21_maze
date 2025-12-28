@@ -13,12 +13,12 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(apps21_maze
     src/app/ui-gui/main.cpp
 
-    # src/lib/service/generator/generator.cpp
+    src/lib/service/generator/generator.cpp
     src/lib/service/ioParser/asyncIOParser.cpp
     src/lib/service/ioParser/asyncIOParser.cpp
     src/lib/service/solver/solver.cpp
     src/lib/model/maze.cpp
-    # src/lib/service/generator/generator.h
+    src/lib/service/generator/generator.h
     src/lib/service/ioParser/asyncIOParser.h
     src/lib/service/solver/solver.h
     src/lib/model/maze.h

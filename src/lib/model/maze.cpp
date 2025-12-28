@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "src/lib/service/generator/generator.h"
 
 MazeModel::MazeModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -79,14 +80,8 @@ void MazeModel::generate(int rows, int cols)
 {
     beginResetModel();
 
-    maze_.rows = rows;
-    maze_.cols = cols;
-    maze_.cells.assign(rows, std::vector<MazeCell>(cols));
-    maze_.isGenerated = true;
-
-    // 👉 здесь ты вызываешь свой Generator
-    // Generator gen(&maze_);
-    // gen.generate();
+    Generator gen;
+    gen.generate(maze_, rows, cols);
 
     endResetModel();
     emit mazeChanged();
