@@ -1,8 +1,42 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 Item {
     id: mazeWindow
+
+    FileDialog {
+        id: saveDialog
+        title: "Save maze"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Maze files (*.txt)", "All files (*)"]
+        onAccepted: {
+            mazeParser.saveMazeAsync(selectedFile, mazeModel)
+        }
+    }
+
+    Connections {
+        target: mazeParser
+        
+        function onSavingFinished(success, errorMsg) {
+            if (!success) {
+                saveErrorDialog.text = errorMsg
+                saveErrorDialog.open()
+            }
+        }
+    }
+
+    Dialog {
+        id: saveErrorDialog
+        title: "Error saving maze"
+        property alias text: saveErrorLabel.text
+        standardButtons: Dialog.Ok
+        anchors.centerIn: parent
+        
+        Label {
+            id: saveErrorLabel
+        }
+    }
 
     Rectangle {
         id: mazeField
@@ -13,7 +47,7 @@ Item {
         border.color: "black"
         border.width: 2
 
-        property real cellWidth: (width - 4) / mazeModel.cols   // account for outer border
+        property real cellWidth: (width - 4) / mazeModel.cols
         property real cellHeight: (height - 4) / mazeModel.rows
 
         Repeater {
@@ -30,7 +64,6 @@ Item {
                 width: mazeField.cellWidth
                 height: mazeField.cellHeight
 
-                // right wall
                 Rectangle {
                     visible: rightWall
                     width: 2
@@ -40,7 +73,6 @@ Item {
                     color: "black"
                 }
 
-                // bottom wall
                 Rectangle {
                     visible: bottomWall
                     height: 2
@@ -53,11 +85,20 @@ Item {
         }
     }
 
-    Button {
-        text: "Back"
+    Row {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.margins: 10
-        onClicked: stackView.pop()
+        spacing: 10
+
+        Button {
+            text: "Back"
+            onClicked: stackView.pop()
+        }
+
+        Button {
+            text: "Save"
+            onClicked: saveDialog.open()
+        }
     }
 }

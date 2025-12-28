@@ -112,6 +112,101 @@ void AsyncIOParser::loadMazeAsync(const QUrl& fileUrl, MazeModel* model) {
             watcher->deleteLater();
           });
 
-  currentTask_ = QtConcurrent::run(&AsyncIOParser::parseMazeFile, filePath);
-  watcher->setFuture(currentTask_);
+  currentLoadTask_ = QtConcurrent::run(&AsyncIOParser::parseMazeFile, filePath);
+  watcher->setFuture(currentLoadTask_);
+}
+
+SaveResult AsyncIOParser::writeMazeFile(const QString& filePath,
+                                        const MazeData& maze) {
+  if (!maze.isGenerated) {
+    return {"no maze data to save"};
+  }
+
+  QFile file(filePath);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    return {"cannot open file for writing: " + filePath};
+  }
+
+  QTextStream out(&file);
+
+  // write dimensions
+  out << maze.rows << " " << maze.cols << "\n";
+
+  // write right walls matrix
+  for (int r = 0; r < maze.rows; ++r) {
+    for (int c = 0; c < maze.cols; ++c) {
+      out << (maze.cells[r][c].rightWall ? 1 : 0);
+      if (c < maze.cols - 1) out << " ";
+    }
+    out << "\n";
+  }
+
+  out << "\n";  // blank line separator
+
+  // write bottom walls matrix
+  for (int r = 0; r < maze.rows; ++r) {
+    for (int c = 0; c < maze.cols; ++c) {
+      out << (maze.cells[r][c].bottomWall ? 1 : 0);
+      if (c < maze.cols - 1) out << " ";
+    }
+    out << "\n";
+  }
+
+  if (out.status() != QTextStream::Ok) {
+    return {"write error occurred"};
+  }
+
+  return {};
+}
+
+void AsyncIOParser::saveMazeAsync(const QUrl& fileUrl, MazeModel* model) {
+  if (!model) {
+    emit savingFinished(false, "null model");
+    return;
+  }
+
+  if (!model->isGenerated()) {
+    emit savingFinished(false, "no maze to save");
+    return;
+  }
+
+  QString filePath = fileUrl.toLocalFile();
+  if (filePath.isEmpty()) {
+    emit savingFinished(false, "invalid file URL");
+    return;
+  }
+
+  emit savingStarted();
+
+  // capture maze data for the async task
+  MazeData mazeData;
+  mazeData.rows = model->rows();
+  mazeData.cols = model->cols();
+  mazeData.isGenerated = true;
+  mazeData.cells.resize(mazeData.rows);
+
+  for (int r = 0; r < mazeData.rows; ++r) {
+    mazeData.cells[r].resize(mazeData.cols);
+    for (int c = 0; c < mazeData.cols; ++c) {
+      int idx = r * mazeData.cols + c;
+      QModelIndex modelIdx = model->index(idx);
+      mazeData.cells[r][c].rightWall =
+          model->data(modelIdx, MazeModel::RightWallRole).toBool();
+      mazeData.cells[r][c].bottomWall =
+          model->data(modelIdx, MazeModel::BottomWallRole).toBool();
+    }
+  }
+
+  auto* watcher = new QFutureWatcher<SaveResult>(this);
+
+  connect(watcher, &QFutureWatcher<SaveResult>::finished, this,
+          [this, watcher]() {
+            SaveResult result = watcher->result();
+            emit savingFinished(result.isValid(), result.error);
+            watcher->deleteLater();
+          });
+
+  currentSaveTask_ =
+      QtConcurrent::run(&AsyncIOParser::writeMazeFile, filePath, mazeData);
+  watcher->setFuture(currentSaveTask_);
 }
