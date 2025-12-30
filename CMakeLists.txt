@@ -32,6 +32,7 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Svg)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -44,19 +45,27 @@ add_library(maze_lib STATIC
 )
 
 target_include_directories(maze_lib PUBLIC ${CMAKE_SOURCE_DIR})
-target_link_libraries(maze_lib PUBLIC Qt6::Core Qt6::Concurrent)
+target_link_libraries(maze_lib PUBLIC Qt6::Core Qt6::Concurrent Qt6::Svg)
 
+qt_add_resources(APP_RESOURCES
+    src/app/resources/resources.qrc
+)
 
 qt_add_executable(apps21_maze
-    src/app/ui-gui/main.cpp
+    src/app/main.cpp
+    ${APP_RESOURCES}
 )
 
 qt_add_qml_module(apps21_maze
     URI s21_maze
     QML_FILES
-        src/app/ui-gui/Main.qml
-        src/app/ui-gui/windows/StartWindow.qml
-        src/app/ui-gui/windows/MazeWindow.qml
+        src/app/Main.qml
+        src/app/windows/StartWindow.qml
+        src/app/windows/MazeWindow.qml
+        src/app/utils/TextButton.qml
+        src/app/utils/MazeWidget.qml
+        src/app/utils/StatusDialog.qml
+        QML_FILES src/app/utils/SelectRowColDialog.qml
 )
 
 target_link_libraries(apps21_maze
@@ -80,7 +89,7 @@ set_target_properties(apps21_maze PROPERTIES
 # tests
 option(BUILD_TESTS "Build unit tests" ON)
 if(BUILD_TESTS)
-    enable_testing()  # add this BEFORE add_subdirectory
+    enable_testing()
     add_subdirectory(tests)
 endif()
 

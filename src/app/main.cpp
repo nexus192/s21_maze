@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
@@ -8,6 +9,8 @@
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
+
+  app.setWindowIcon(QIcon(":/icons/labyrinth-logo.svg"));
 
   MazeModel mazeModel;
   AsyncIOParser parser;

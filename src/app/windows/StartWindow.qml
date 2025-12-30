@@ -2,11 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 
+import "../utils"
+
 Item {
     id: startWindow
 
     FileDialog {
-        id: fileDialog
+        id: _fileDialog
         title: "Select maze file"
         nameFilters: ["Maze files (*.txt)", "All files (*)"]
         onAccepted: {
@@ -16,26 +18,28 @@ Item {
 
     Connections {
         target: mazeParser
-        
+
         function onLoadingFinished(success, errorMsg) {
             if (success) {
-                stackView.push("MazeWindow.qml")
+                _stackView.push("MazeWindow.qml")
             } else {
-                errorDialog.text = errorMsg
-                errorDialog.open()
+                _errorDialog.massegeText = errorMsg
+                _errorDialog.open()
             }
         }
     }
 
-    Dialog {
-        id: errorDialog
-        title: "Error loading maze"
-        property alias text: errorLabel.text
-        standardButtons: Dialog.Ok
-        anchors.centerIn: parent
-        
-        Label {
-            id: errorLabel
+    StatusDialog {
+        id: _errorDialog
+        onAcceptClicked: () => reject()
+    }
+
+    SelectRowColDialog {
+        id: _selectRowColDialog
+        onAcceptClicked: function (rows, cols) {
+            mazeModel.generate(rows, rows)
+            _selectRowColDialog.reject()
+            _stackView.push("MazeWindow.qml")
         }
     }
 
@@ -45,15 +49,12 @@ Item {
 
         Button {
             text: "Generate maze"
-            onClicked: {
-                mazeModel.generate(20, 20)
-                stackView.push("MazeWindow.qml")
-            }
+            onClicked: () => _selectRowColDialog.open()
         }
 
         Button {
             text: "Load from file"
-            onClicked: fileDialog.open()
+            onClicked: () => _fileDialog.open()
         }
     }
 }

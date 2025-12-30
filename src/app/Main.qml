@@ -3,11 +3,16 @@ import QtQuick.Controls
 import "windows"
 
 ApplicationWindow {
-    id: root
-    width: 800
-    height: 600
+    id: _root
+    width: 760
+    height: 540
+    minimumWidth: width
+    maximumWidth: width
+    minimumHeight: height
+    maximumHeight: height
     visible: true
-    title: "Maze Generator"
+    color: "#252525"
+    title: "s21_Maze"
 
     property alias stackView: _stackView
 
