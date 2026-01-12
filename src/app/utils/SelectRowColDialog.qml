@@ -91,6 +91,7 @@ Dialog {
                             }
 
                             placeholderText: "Rows (5–50)"
+                            placeholderTextColor: "#9DA4AE"
                         }
                     }
 
@@ -129,6 +130,7 @@ Dialog {
                                 top: maxValue
                             }
                             placeholderText: "Columns (5–50)"
+                            placeholderTextColor: "#9DA4AE"
                         }
                     }
 
