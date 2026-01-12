@@ -6,7 +6,6 @@ Rectangle {
     id: _button
 
     property string text
-    property int fontWeight: 700
 
     property color enabledColor
     property color pressedColor
@@ -46,8 +45,6 @@ Rectangle {
         Label {
             id: _buttonText
             font.pixelSize: _button.pixelSize
-            font.family: _button.fontFamily
-            font.weight: _button.fontWeight
             color: {
                 if (enabled && !_mouseArea.containsPress) {
                     return _button.enabledTextColor

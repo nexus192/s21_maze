@@ -16,8 +16,8 @@ Dialog {
     property bool isValid: false
 
     function validate() {
-        var r = parseInt(rowsField.text)
-        var c = parseInt(colsField.text)
+        var r = parseInt(_rowsField.text)
+        var c = parseInt(_colsField.text)
 
         rowsError = isNaN(r) || r < minValue || r > maxValue
         colsError = isNaN(c) || c < minValue || c > maxValue
