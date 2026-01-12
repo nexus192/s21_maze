@@ -7,7 +7,7 @@ all: install tests
 
 build:
 	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Release
-	cmake --build $(BUILD_DIR)
+	cmake --build $(BUILD_DIR) --config Release
 
 install: build
 	cmake --install $(BUILD_DIR) --prefix $(INSTALL_DIR)
