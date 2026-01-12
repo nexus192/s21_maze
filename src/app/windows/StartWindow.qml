@@ -37,7 +37,7 @@ Item {
     SelectRowColDialog {
         id: _selectRowColDialog
         onAcceptClicked: function (rows, cols) {
-            mazeModel.generate(rows, rows)
+            mazeModel.generate(rows, cols)
             _selectRowColDialog.reject()
             _stackView.push("MazeWindow.qml")
         }
