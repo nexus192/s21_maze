@@ -10,5 +10,6 @@ function(add_maze_test name)
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
 
+add_maze_test(test_maze_validator)
 add_maze_test(test_generator)
 add_maze_test(test_solver)
