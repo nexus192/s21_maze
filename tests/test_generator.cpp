@@ -2,6 +2,7 @@
 
 #include "src/lib/model/maze.h"
 #include "src/lib/service/generator/generator.h"
+#include "tests/utils/maze_validator.h"
 
 class TestGenerator : public QObject {
   Q_OBJECT

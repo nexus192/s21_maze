@@ -15,16 +15,6 @@ struct MazeData {
   std::vector<std::vector<MazeCell>> cells;
 };
 
-class MazeValidator {
- public:
-  static bool IsMazePerfect(const MazeData& maze);
-
- private:
-  static int CountPassages(const MazeData& maze);
-  static int CountReachableCells(const MazeData& maze);
-  static bool BoundaryWallsIntact(const MazeData& maze);
-};
-
 class MazeModel : public QAbstractListModel {
   Q_OBJECT
 
