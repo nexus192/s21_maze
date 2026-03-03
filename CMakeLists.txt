@@ -30,7 +30,6 @@ if(BUILD_COVERAGE)
 endif()
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 find_package(Qt6 REQUIRED COMPONENTS Svg)
 
@@ -70,7 +69,6 @@ qt_add_qml_module(app_s21_maze
 
 target_link_libraries(app_s21_maze
     PRIVATE Qt6::Quick
-    Qt6::Widgets
     maze_lib
 )
 
