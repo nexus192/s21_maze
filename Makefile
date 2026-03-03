@@ -6,7 +6,7 @@ INSTALL_DIR = bin
 all: install tests
 
 build:
-	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Release
+	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	cmake --build $(BUILD_DIR) --config Release
 
 install: build
@@ -42,7 +42,7 @@ dist: clean
 	@echo "Created dist/s21_maze_$(shell date +%Y%m%d).tar.gz"
 
 tests:
-	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
+	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	cmake --build $(BUILD_DIR)
 	cd $(BUILD_DIR) && ctest --output-on-failure
 
