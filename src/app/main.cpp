@@ -17,10 +17,11 @@ int main(int argc, char* argv[]) {
   Solver solver;
 
   // connect solver to maze data
-  QObject::connect(&mazeModel, &MazeModel::mazeChanged, [&]() {
-    solver.setMazeData(&mazeModel.mazeData());
-    solver.clearPath();
-  });
+  QObject::connect(&mazeModel, &MazeModel::mazeChanged,
+                   [&mazeModel, &solver]() {
+                     solver.clearPath();
+                     solver.setMazeData(&mazeModel.mazeData());
+                   });
 
   QQmlApplicationEngine engine;
   QObject::connect(
