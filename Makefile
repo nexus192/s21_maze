@@ -50,3 +50,7 @@ coverage:
 	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON
 	cmake --build $(BUILD_DIR)
 	cd $(BUILD_DIR) && $(MAKE) coverage
+
+style:
+	find . -name "*.cpp" -o -name "*.h" | xargs clang-format --style=google -n
+	find . -name "*.cpp" -o -name "*.h" | xargs clang-format --style=google -i

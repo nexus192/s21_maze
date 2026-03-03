@@ -3,16 +3,26 @@
 #include <QAbstractListModel>
 
 struct MazeCell {
-  bool rightWall;
-  bool bottomWall;
+  bool rightWall = false;
+  bool bottomWall = false;
 };
 
 struct MazeData {
-  int rows{0};
-  int cols{0};
-  bool isGenerated{false};
+  int rows = 0;
+  int cols = 0;
+  bool isGenerated = false;
 
   std::vector<std::vector<MazeCell>> cells;
+};
+
+class MazeValidator {
+ public:
+  static bool IsMazePerfect(const MazeData& maze);
+
+ private:
+  static int CountPassages(const MazeData& maze);
+  static int CountReachableCells(const MazeData& maze);
+  static bool BoundaryWallsIntact(const MazeData& maze);
 };
 
 class MazeModel : public QAbstractListModel {

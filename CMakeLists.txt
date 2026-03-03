@@ -15,14 +15,14 @@ if(BUILD_COVERAGE)
         add_custom_target(coverage
             COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
             COMMAND ${GCOVR} -r ${CMAKE_SOURCE_DIR}
-                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/generator/'
-                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/solver/'
+                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/generator/generator.cpp'
+                --filter '${CMAKE_SOURCE_DIR}/src/lib/service/solver/solver.cpp'
                 --html --html-details --html-theme github.dark-green
                 -o coverage.html
             COMMAND open coverage.html
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
             COMMENT "Running tests and generating coverage report..."
-            DEPENDS test_generator test_solver
+            DEPENDS test_maze_validator test_generator test_solver
         )
     else()
         message(WARNING "gcovr not found, coverage target disabled")

@@ -30,9 +30,10 @@ Rectangle {
             Rectangle {
                 x: parent.width / 2 - width / 2
                 y: parent.height / 2 - height / 2
-                width: parent.width - 5
-                height: parent.height - 5
-                radius: width / 2
+                property real size: Math.min(parent.width, parent.height) - 5
+                width: size
+                height: size
+                radius: size / 2
                 color: {
                     if (_cellDelegate.row === startRow
                             && _cellDelegate.col === startCol)
