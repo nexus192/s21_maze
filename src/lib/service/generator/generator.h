@@ -17,7 +17,8 @@ class Generator {
 
   void assignNewSets(int cols);
   void mergeRandomRight(MazeData& maze, int row);
-  void createBottomPassages(MazeData& maze, int row, bool isLastRow);
+  void mergeSets(int oldSet, int newSet, int cols);
+  void createBottomPassages(MazeData& maze, int row);
   void prepareNextRow(const MazeData& maze, int row);
   void processLastRow(MazeData& maze);
 };
