@@ -40,7 +40,6 @@ class TestSolver : public QObject {
     MazeData maze;
     maze.rows = 3;
     maze.cols = 3;
-    maze.isGenerated = true;
     maze.cells.assign(3, std::vector<MazeCell>(3, {false, false}));
 
     // right walls
@@ -73,7 +72,6 @@ class TestSolver : public QObject {
     MazeData maze;
     maze.rows = 2;
     maze.cols = 2;
-    maze.isGenerated = true;
     maze.cells.assign(2, std::vector<MazeCell>(2, {true, true}));
     // all walls = all cells isolated
     return maze;
@@ -156,7 +154,7 @@ class TestSolver : public QObject {
   }
 
   void testUninitializedMaze() {
-    MazeData maze;  // default: isGenerated = false
+    MazeData maze;
     Solver solver;
 
     auto path = solver.solve(maze, QPoint(0, 0), QPoint(1, 1));

@@ -45,7 +45,7 @@ class TestGenerator : public QObject {
 
       gen.generate(maze, rows, cols);
 
-      QVERIFY2(maze.isGenerated,
+      QVERIFY2(!maze.cells.empty(),
                qPrintable(QString("iteration %1: maze not generated").arg(i)));
       QVERIFY(MazeValidator::IsMazePerfect(maze));
     }

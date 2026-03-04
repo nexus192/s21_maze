@@ -10,7 +10,6 @@ void Generator::generate(MazeData& maze, int rows, int cols) {
   maze.rows = rows;
   maze.cols = cols;
   maze.cells.assign(rows, std::vector<MazeCell>(cols, {true, true}));
-  maze.isGenerated = true;
 
   sets_.clear();
   nextSetId_ = 1;

@@ -78,7 +78,6 @@ ParseResult AsyncIOParser::parseMazeFile(const QString& filePath) {
     }
   }
 
-  maze.isGenerated = true;
   return {maze, {}};
 }
 
@@ -118,9 +117,7 @@ void AsyncIOParser::loadMazeAsync(const QUrl& fileUrl, MazeModel* model) {
 
 SaveResult AsyncIOParser::writeMazeFile(const QString& filePath,
                                         const MazeData& maze) {
-  if (!maze.isGenerated) {
-    return {"no maze data to save"};
-  }
+  if (maze.cells.empty()) return {"no maze data to save"};
 
   QFile file(filePath);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -165,7 +162,7 @@ void AsyncIOParser::saveMazeAsync(const QUrl& fileUrl, MazeModel* model) {
     return;
   }
 
-  if (!model->isGenerated()) {
+  if (model->isEmpty()) {
     emit savingFinished(false, "no maze to save");
     return;
   }
@@ -182,7 +179,7 @@ void AsyncIOParser::saveMazeAsync(const QUrl& fileUrl, MazeModel* model) {
   MazeData mazeData;
   mazeData.rows = model->rows();
   mazeData.cols = model->cols();
-  mazeData.isGenerated = true;
+  // mazeData.isGenerated = true;
   mazeData.cells.resize(mazeData.rows);
 
   for (int r = 0; r < mazeData.rows; ++r) {

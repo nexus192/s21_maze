@@ -9,7 +9,7 @@ int MazeModel::rowCount(const QModelIndex&) const {
 }
 
 QVariant MazeModel::data(const QModelIndex& index, int role) const {
-  if (!index.isValid() || !maze_.isGenerated) return {};
+  if (!index.isValid()) return {};
 
   int flatIndex = index.row();
   int r = flatIndex / maze_.cols;
@@ -35,7 +35,6 @@ QHash<int, QByteArray> MazeModel::roleNames() const {
 
 int MazeModel::rows() const { return maze_.rows; }
 int MazeModel::cols() const { return maze_.cols; }
-bool MazeModel::isGenerated() const { return maze_.isGenerated; }
 
 void MazeModel::generate(int rows, int cols) {
   beginResetModel();
@@ -51,6 +50,8 @@ void MazeModel::setMazeData(MazeData&& data) {
   endResetModel();
   emit mazeChanged();
 }
+
+bool MazeModel::isEmpty() const { return maze_.cells.empty(); }
 
 void MazeModel::clear() {
   beginResetModel();

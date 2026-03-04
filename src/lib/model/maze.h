@@ -11,7 +11,6 @@ struct MazeCell {
 struct MazeData {
   int rows = 0;
   int cols = 0;
-  bool isGenerated = false;
 
   std::vector<std::vector<MazeCell>> cells;
 };
@@ -21,7 +20,6 @@ class MazeModel : public QAbstractListModel {
 
   Q_PROPERTY(int rows READ rows NOTIFY mazeChanged)
   Q_PROPERTY(int cols READ cols NOTIFY mazeChanged)
-  Q_PROPERTY(bool isGenerated READ isGenerated NOTIFY mazeChanged)
 
  public:
   enum Roles { RightWallRole = Qt::UserRole + 1, BottomWallRole };
@@ -34,7 +32,7 @@ class MazeModel : public QAbstractListModel {
 
   int rows() const;
   int cols() const;
-  bool isGenerated() const;
+  bool isEmpty() const;
 
   void setMazeData(MazeData&& data);
   Q_INVOKABLE void generate(int rows, int cols);

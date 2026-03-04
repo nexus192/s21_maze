@@ -49,7 +49,7 @@ bool Solver::canMove(const MazeData& maze, QPoint from, QPoint to) const {
 
 std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
                                   QPoint end) {
-  if (!maze.isGenerated) return {};
+  if (maze.cells.empty()) return {};
 
   // validate bounds
   if (start.x() < 0 || start.x() >= maze.rows || start.y() < 0 ||

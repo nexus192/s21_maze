@@ -12,7 +12,6 @@ MazeData MakeMaze(int rows, int cols,
   MazeData maze;
   maze.rows = rows;
   maze.cols = cols;
-  maze.isGenerated = true;
   maze.cells.resize(rows, std::vector<MazeCell>(cols));
 
   for (int r = 0; r < rows; ++r) {
