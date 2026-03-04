@@ -27,7 +27,6 @@ void Generator::generate(MazeData& maze, int rows, int cols) {
 }
 
 void Generator::assignNewSets(int cols) {
-  sets_.resize(cols);
   for (int c = 0; c < cols; ++c) {
     if (sets_[c] == kNoSet) {
       sets_[c] = nextSetId_++;
@@ -75,10 +74,8 @@ void Generator::createBottomPassages(MazeData& maze, int row, bool isLastRow) {
 }
 
 void Generator::prepareNextRow(const MazeData& maze, int row) {
-  int cols = maze.cols;
-
   // cells with bottom wall start fresh (set = 0), others keep their set
-  for (int c = 0; c < cols; ++c) {
+  for (int c = 0; c < maze.cols; ++c) {
     if (maze.cells[row][c].bottomWall) {
       sets_[c] = kNoSet;
     }
