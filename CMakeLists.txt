@@ -17,6 +17,7 @@ if(BUILD_COVERAGE)
             COMMAND ${GCOVR} -r ${CMAKE_SOURCE_DIR}
                 --filter '${CMAKE_SOURCE_DIR}/src/lib/service/generator/generator.cpp'
                 --filter '${CMAKE_SOURCE_DIR}/src/lib/service/solver/solver.cpp'
+                --filter '${CMAKE_SOURCE_DIR}/tests/utils/maze_validator.cpp'
                 --html --html-details --html-theme github.dark-green
                 -o coverage.html
             COMMAND open coverage.html
