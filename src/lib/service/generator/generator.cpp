@@ -27,9 +27,9 @@ void Generator::generate(MazeData& maze, int rows, int cols) {
 }
 
 void Generator::assignNewSets(int cols) {
-  for (int c = 0; c < cols; ++c) {
-    if (sets_[c] == kNoSet) {
-      sets_[c] = nextSetId_++;
+  for (int col = 0; col < cols; ++col) {
+    if (sets_[col] == kNoSet) {
+      sets_[col] = nextSetId_++;
     }
   }
 }
