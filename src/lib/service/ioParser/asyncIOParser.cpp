@@ -179,7 +179,6 @@ void AsyncIOParser::saveMazeAsync(const QUrl& fileUrl, MazeModel* model) {
   MazeData mazeData;
   mazeData.rows = model->rows();
   mazeData.cols = model->cols();
-  // mazeData.isGenerated = true;
   mazeData.cells.resize(mazeData.rows);
 
   for (int r = 0; r < mazeData.rows; ++r) {
