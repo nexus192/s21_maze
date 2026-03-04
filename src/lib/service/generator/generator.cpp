@@ -11,37 +11,25 @@ void Generator::generate(MazeData& maze, int rows, int cols) {
   maze.cols = cols;
   maze.cells.assign(rows, std::vector<MazeCell>(cols, {true, true}));
 
-  sets_.clear();
+  sets_.assign(cols, kNoSet);
+
   nextSetId_ = 1;
 
-  for (int row = 0; row < rows; ++row) {
+  for (int row = 0; row < rows - 1; ++row) {
     assignNewSets(cols);
-
-    if (row == rows - 1) {
-      // last row: merge all adjacent cells of different sets
-      for (int col = 0; col < cols - 1; ++col) {
-        if (sets_[col] != sets_[col + 1]) {
-          maze.cells[row][col].rightWall = false;
-          int oldSet = sets_[col + 1];
-          int newSet = sets_[col];
-          for (int c = 0; c < cols; ++c) {
-            if (sets_[c] == oldSet) sets_[c] = newSet;
-          }
-        }
-      }
-      // last row always has bottom walls
-    } else {
-      mergeRandomRight(maze, row);
-      createBottomPassages(maze, row, false);
-      prepareNextRow(maze, row);
-    }
+    mergeRandomRight(maze, row);
+    createBottomPassages(maze, row, false);
+    prepareNextRow(maze, row);
   }
+
+  assignNewSets(cols);
+  processLastRow(maze);
 }
 
 void Generator::assignNewSets(int cols) {
   sets_.resize(cols);
   for (int c = 0; c < cols; ++c) {
-    if (sets_[c] == 0) {
+    if (sets_[c] == kNoSet) {
       sets_[c] = nextSetId_++;
     }
   }
@@ -92,7 +80,24 @@ void Generator::prepareNextRow(const MazeData& maze, int row) {
   // cells with bottom wall start fresh (set = 0), others keep their set
   for (int c = 0; c < cols; ++c) {
     if (maze.cells[row][c].bottomWall) {
-      sets_[c] = 0;
+      sets_[c] = kNoSet;
     }
   }
+}
+
+void Generator::processLastRow(MazeData& maze) {
+  int row = maze.rows - 1;
+
+  // last row: merge all adjacent cells of different sets
+  for (int col = 0; col < maze.cols - 1; ++col) {
+    if (sets_[col] != sets_[col + 1]) {
+      maze.cells[row][col].rightWall = false;
+      int oldSet = sets_[col + 1];
+      int newSet = sets_[col];
+      for (int c = 0; c < maze.cols; ++c) {
+        if (sets_[c] == oldSet) sets_[c] = newSet;
+      }
+    }
+  }
+  // last row always has bottom walls
 }
