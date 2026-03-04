@@ -1,4 +1,5 @@
-#pragma once
+#ifndef S21_GENERATOR_H_
+#define S21_GENERATOR_H_
 
 #include <vector>
 
@@ -17,3 +18,5 @@ class Generator {
   void createBottomPassages(MazeData& maze, int row, bool isLastRow);
   void prepareNextRow(const MazeData& maze, int row);
 };
+
+#endif  // S21_GENERATOR_H_

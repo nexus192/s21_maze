@@ -1,4 +1,5 @@
-#pragma once
+#ifndef S21_MAZE_H_
+#define S21_MAZE_H_
 
 #include <QAbstractListModel>
 
@@ -45,3 +46,5 @@ class MazeModel : public QAbstractListModel {
  private:
   MazeData maze_;
 };
+
+#endif  // S21_MAZE_H_

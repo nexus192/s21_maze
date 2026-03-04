@@ -1,4 +1,5 @@
-#pragma once
+#ifndef S21_PARSER_H_
+#define S21_PARSER_H_
 
 #include <QFuture>
 #include <QObject>
@@ -45,3 +46,5 @@ class AsyncIOParser : public QObject {
   QFuture<ParseResult> currentLoadTask_;
   QFuture<SaveResult> currentSaveTask_;
 };
+
+#endif  // S21_PARSER_H_

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef S21_SOLVER_H_
+#define S21_SOLVER_H_
 
 #include <QObject>
 #include <QPoint>
@@ -37,3 +38,5 @@ class Solver : public QObject {
   const MazeData* maze_ = nullptr;
   std::vector<QPoint> currentPath_;
 };
+
+#endif  // S21_SOLVER_H_
