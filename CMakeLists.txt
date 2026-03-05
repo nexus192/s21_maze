@@ -19,6 +19,7 @@ if(BUILD_COVERAGE)
                 --filter '${CMAKE_SOURCE_DIR}/src/lib/service/solver/solver.cpp'
                 --filter '${CMAKE_SOURCE_DIR}/tests/utils/maze_validator.cpp'
                 --html --html-details --html-theme github.dark-green
+                --html-title "A1_Maze_CPP coverage report"
                 -o coverage.html
             COMMAND open coverage.html
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
