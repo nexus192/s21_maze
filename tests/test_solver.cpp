@@ -105,7 +105,9 @@ class TestSolver : public QObject {
     Solver solver;
 
     QVERIFY(solver.solve(maze, QPoint(0, 0), QPoint(-1, 0)).empty());
+    QVERIFY(solver.solve(maze, QPoint(0, 0), QPoint(0, -1)).empty());
     QVERIFY(solver.solve(maze, QPoint(0, 0), QPoint(3, 0)).empty());
+    QVERIFY(solver.solve(maze, QPoint(0, 0), QPoint(0, 3)).empty());
   }
 
   void testUninitializedMaze() {
@@ -117,7 +119,7 @@ class TestSolver : public QObject {
     QVERIFY(path.empty());
   }
 
-  // ---- Deterministic solver tests (5x5) ----
+  // ---- Deterministic solver tests ----
 
   void testKnownCorridorPath() {
     MazeData maze = CreateCorridorMaze5x5();
