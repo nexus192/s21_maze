@@ -24,3 +24,9 @@ foreach(name test_maze_validator test_generator)
 endforeach()
 
 add_maze_test(test_solver)
+
+
+add_maze_test(test_io_parser)
+target_compile_definitions(test_io_parser PRIVATE
+    TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/examples"
+)
