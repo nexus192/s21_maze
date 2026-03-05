@@ -18,33 +18,24 @@ Solver::Solver(QObject* parent) : QObject(parent) {}
 
 void Solver::setMazeData(const MazeData* maze) { maze_ = maze; }
 
-bool Solver::canMove(const MazeData& maze, QPoint from, QPoint to) const {
-  int fr = from.x(), fc = from.y();
-  int tr = to.x(), tc = to.y();
+bool Solver::canMove(const MazeData& maze, QPoint from,
+                     Direction direction) const {
+  const int fromRow = from.x();
+  const int fromColumn = from.y();
 
-  // bounds check
-  if (tr < 0 || tr >= maze.rows || tc < 0 || tc >= maze.cols) {
-    return false;
+  switch (direction) {
+    case Direction::Right:
+      return !maze.cells[fromRow][fromColumn].rightWall;
+    case Direction::Left:
+      if (fromColumn == 0) return false;
+      return !maze.cells[fromRow][fromColumn - 1].rightWall;
+    case Direction::Down:
+      return !maze.cells[fromRow][fromColumn].bottomWall;
+    case Direction::Up:
+      if (fromRow == 0) return false;
+      return !maze.cells[fromRow - 1][fromColumn].bottomWall;
   }
-
-  // moving right: check right wall of current cell
-  if (tr == fr && tc == fc + 1) {
-    return !maze.cells[fr][fc].rightWall;
-  }
-  // moving left: check right wall of target cell
-  if (tr == fr && tc == fc - 1) {
-    return !maze.cells[tr][tc].rightWall;
-  }
-  // moving down: check bottom wall of current cell
-  if (tc == fc && tr == fr + 1) {
-    return !maze.cells[fr][fc].bottomWall;
-  }
-  // moving up: check bottom wall of target cell
-  if (tc == fc && tr == fr - 1) {
-    return !maze.cells[tr][tc].bottomWall;
-  }
-
-  return false;
+  Q_UNREACHABLE();
 }
 
 std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
@@ -67,13 +58,6 @@ std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
   queue.enqueue(start);
   parent[start] = QPoint(-1, -1);  // sentinel for start
 
-  const std::array<QPoint, 4> directions = {
-      QPoint(0, 1),   // right
-      QPoint(0, -1),  // left
-      QPoint(1, 0),   // down
-      QPoint(-1, 0)   // up
-  };
-
   while (!queue.isEmpty()) {
     QPoint current = queue.dequeue();
 
@@ -87,10 +71,15 @@ std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
       return path;
     }
 
-    for (const auto& dir : directions) {
-      QPoint next(current.x() + dir.x(), current.y() + dir.y());
+    for (const auto& [direction, delta] : kDirections) {
+      QPoint next(current.x() + delta.x(), current.y() + delta.y());
 
-      if (parent.find(next) == parent.end() && canMove(maze, current, next)) {
+      if (next.x() < 0 || next.x() >= maze.rows || next.y() < 0 ||
+          next.y() >= maze.cols)
+        continue;
+
+      if (parent.find(next) == parent.end() &&
+          canMove(maze, current, direction)) {
         parent[next] = current;
         queue.enqueue(next);
       }

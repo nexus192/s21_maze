@@ -33,7 +33,15 @@ class Solver : public QObject {
   void pathChanged();
 
  private:
-  bool canMove(const MazeData& maze, QPoint from, QPoint to) const;
+  enum class Direction { Right, Left, Down, Up };
+  static constexpr std::array<std::pair<Direction, QPoint>, 4> kDirections = {{
+      {Direction::Right, {0, 1}},
+      {Direction::Left, {0, -1}},
+      {Direction::Down, {1, 0}},
+      {Direction::Up, {-1, 0}},
+  }};
+
+  bool canMove(const MazeData& maze, QPoint from, Direction direction) const;
 
   const MazeData* maze_ = nullptr;
   std::vector<QPoint> currentPath_;
