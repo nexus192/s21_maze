@@ -93,8 +93,6 @@ void AsyncIOParser::loadMazeAsync(const QUrl& fileUrl, MazeModel* model) {
     return;
   }
 
-  emit loadingStarted();
-
   auto* watcher = new QFutureWatcher<ParseResult>(this);
 
   connect(watcher, &QFutureWatcher<ParseResult>::finished, this,

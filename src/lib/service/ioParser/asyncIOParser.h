@@ -37,7 +37,6 @@ class AsyncIOParser : public QObject {
                                   const MazeData& maze);
 
  signals:
-  void loadingStarted();
   void loadingFinished(bool success, const QString& errorMsg);
   void savingStarted();
   void savingFinished(bool success, const QString& errorMsg);
