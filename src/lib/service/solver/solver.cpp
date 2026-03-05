@@ -5,15 +5,6 @@
 
 #include "src/lib/model/maze.h"
 
-namespace {
-// hash for QPoint to use in unordered_map
-struct QPointHash {
-  size_t operator()(const QPoint& p) const {
-    return std::hash<int>()(p.x()) ^ (std::hash<int>()(p.y()) << 16);
-  }
-};
-}  // namespace
-
 Solver::Solver(QObject* parent) : QObject(parent) {}
 
 void Solver::setMazeData(const MazeData* maze) { maze_ = maze; }
@@ -61,15 +52,7 @@ std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
   while (!queue.isEmpty()) {
     QPoint current = queue.dequeue();
 
-    if (current == end) {
-      // reconstruct path
-      std::vector<QPoint> path;
-      for (QPoint p = end; p != QPoint(-1, -1); p = parent[p]) {
-        path.push_back(p);
-      }
-      std::reverse(path.begin(), path.end());
-      return path;
-    }
+    if (current == end) return reconstructPath(parent, end);
 
     for (const auto& [direction, delta] : kDirections) {
       QPoint next(current.x() + delta.x(), current.y() + delta.y());
@@ -87,6 +70,17 @@ std::vector<QPoint> Solver::solve(const MazeData& maze, QPoint start,
   }
 
   return {};  // no path found
+}
+
+std::vector<QPoint> Solver::reconstructPath(
+    const std::unordered_map<QPoint, QPoint, QPointHash>& parent,
+    QPoint end) const {
+  std::vector<QPoint> path;
+  for (QPoint p = end; p != QPoint(-1, -1); p = parent.at(p)) {
+    path.push_back(p);
+  }
+  std::reverse(path.begin(), path.end());
+  return path;
 }
 
 void Solver::solveMaze(int startRow, int startCol, int endRow, int endCol) {

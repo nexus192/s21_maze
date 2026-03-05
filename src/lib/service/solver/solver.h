@@ -8,6 +8,12 @@
 
 struct MazeData;
 
+struct QPointHash {
+  size_t operator()(const QPoint& p) const {
+    return std::hash<int>()(p.x()) ^ (std::hash<int>()(p.y()) << 16);
+  }
+};
+
 class Solver : public QObject {
   Q_OBJECT
 
@@ -42,7 +48,9 @@ class Solver : public QObject {
   }};
 
   bool canMove(const MazeData& maze, QPoint from, Direction direction) const;
-
+  std::vector<QPoint> reconstructPath(
+      const std::unordered_map<QPoint, QPoint, QPointHash>& parent,
+      QPoint end) const;
   const MazeData* maze_ = nullptr;
   std::vector<QPoint> currentPath_;
 };
